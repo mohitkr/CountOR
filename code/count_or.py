@@ -51,7 +51,7 @@ def cleanData(data):
                 dataTensor[index]=1
     return dataTensor,variables
 
-def saveConstraintsForAll(dataTensor,variables,orderingNotImp,ind,num_nurses,directory,tag):
+def saveConstraintsForAll(dataTensor,variables,orderingNotImp):
     repeatDim=()
     r=set([v for v in range(len(variables)) if v not in repeatDim])
     subsets=cf.split(r,(),repeatDim)
@@ -81,14 +81,18 @@ def saveConstraintsForAll(dataTensor,variables,orderingNotImp,ind,num_nurses,dir
         constraints.extend([''])
     return constraints
 
-def learnConstraints(csvFile):
-    data = readCSV(csvFile)
-    dataTensor,variables=cleanData(data)
+def learnConstraints(dataTensor,dim):
+#    data = readCSV(csvFile)
+#    dataTensor,variables=cleanData(data)
+    variables = []
+    for d in dim:
+        variables.append(list(range(d)))
+#    print(variables)
     lenVar=[]
     for i in range(len(variables)):
         lenVar.append(len(variables[i]))
     orderingNotImp=[2]
-    constraints=saveConstraintsForAll(dataTensor,variables,orderingNotImp,0,num_nurses,directory,tag+str(0))
+    constraints=saveConstraintsForAll(dataTensor,variables,orderingNotImp)
     return constraints
 #    saveConstraintsForAll(dataTensor,variables,orderingNotImp,1,num_nurses,directory,tag+str(0))
     
