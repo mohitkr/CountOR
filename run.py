@@ -3,9 +3,11 @@
 import numpy as np
 import argparse
 import countor
+from pprint import pprint
 
 
 def main():
+    np.seterr(all='raise')
 
     fmt_class = argparse.ArgumentDefaultsHelpFormatter
     parser = argparse.ArgumentParser(formatter_class=fmt_class)
@@ -13,12 +15,7 @@ def main():
                         help='Path to the input CSV')
     args = parser.parse_args()
 
-    np.seterr(all='raise')
-    np.random.seed(args.seed)
-
-    rng = np.random.RandomState(args.seed)
-
-    print(countor.count_or.learnConstraintsFromCSV(args.csv))
+    pprint(countor.count_or.learnConstraintsFromCSV(args.csv))
 
 
 if __name__ == '__main__':
