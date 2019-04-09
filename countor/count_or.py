@@ -9,7 +9,7 @@ Created on Wed Mar 20 17:02:20 2019
 import csv
 import numpy as np
 from collections import OrderedDict
-import constraintFormulation as cf
+from . import constraintFormulation as cf
 import os.path
 
 def readCSV(fileName):
