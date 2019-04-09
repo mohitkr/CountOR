@@ -11,8 +11,6 @@ def main():
     parser = argparse.ArgumentParser(formatter_class=fmt_class)
     parser.add_argument('csv', type=str,
                         help='Path to the input CSV')
-    parser.add_argument('-s', '--seed', type=int, default=0,
-                        help='RNG seed')
     args = parser.parse_args()
 
     np.seterr(all='raise')
