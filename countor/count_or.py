@@ -54,23 +54,25 @@ def cleanData(data):
 def saveConstraintsForAll(dataTensor,variables,orderingNotImp):
     repeatDim=()
     r=set([v for v in range(len(variables)) if v not in repeatDim])
-    subsets=cf.split(r,(),repeatDim)
-    constraints=[]
-    for l in range(len(subsets)):
-        subset=subsets[l]
-        newset=subset[0]+subset[1]
+
+    constraints = []
+    for l, (m, s) in enumerate(cf.split(r, (), repeatDim)):
+        newset = m + s
+
         # this value will be used to filter max constraints
         maxPossible=1
-        for i in range(len(subset[1])):
-            maxPossible*=len(variables[subset[1][i]])
+        for i in range(len(s)):
+            maxPossible*=len(variables[s[i]])
         idTensor=cf.tensorIndicator(dataTensor,newset, variables)
-        sumSet = range(len(subset[0]),len(newset))
+        sumSet = range(len(m),len(newset))
 
         sumTensor_max,sumTensor_min=cf.tensorSum(idTensor,sumSet, np.array(variables)[list(newset)],0)
 
         constraints_row = [sumTensor_min, sumTensor_max]
-        if len(set(subset[1]))==1 and len(set(orderingNotImp) & set(subset[1]))==0:
-            minConsZero,maxConsZero,minConsNonZero,maxConsNonZero = cf.tensorConsZero(idTensor,sumSet, np.array(variables)[list(newset)])
+        if len(set(s)) == 1 and \
+           len(set(orderingNotImp) & set(s)) == 0:
+            minConsZero, maxConsZero, minConsNonZero, maxConsNonZero = \
+                cf.tensorConsZero(idTensor, sumSet, np.array(variables)[list(newset)])
             constraints_row.extend([minConsZero, maxConsZero, minConsNonZero, maxConsNonZero])
         else:
             constraints_row.extend([None]*4)
