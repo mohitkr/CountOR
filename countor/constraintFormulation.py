@@ -61,7 +61,7 @@ def maxConsNonZero(X):
             mx=max(ind,mx)
         else:
             ind=0
-    return max(mx, ind)    
+    return max(mx, ind)
 
 def tensorIndicator(X,dim,var):
     outputMatSize=[]
@@ -79,7 +79,7 @@ def tensorIndicator(X,dim,var):
             a[dim[i]]=multiIndex[i]
         if np.count_nonzero(X[tuple(a)])!=0:
             outputTensor[multiIndex]=1
-            
+
     return outputTensor
 
 def tensorSum(X,dim,var,ecInd):
@@ -105,7 +105,7 @@ def tensorSum(X,dim,var,ecInd):
 #    plt.hist(outputTensor.ravel(),bins='auto')
 #    plt.show()
     return np.amax(outputTensor).astype(np.int64), np.amin(outputTensor).astype(np.int64)
-  
+
 def tensorConsZero(X,dim,var):
     newdim = range(len(X.shape))
     newdim=list(set(newdim)-set(dim))
@@ -132,14 +132,14 @@ def tensorConsZero(X,dim,var):
         outputTensor2_min[multiIndex]=minConsNonZero(X[tuple(a)])
         outputTensor1_max[multiIndex]=maxConsZero(X[tuple(a)])
         outputTensor2_max[multiIndex]=maxConsNonZero(X[tuple(a)])
-    
-    
+
+
     outputTensor1_min = outputTensor1_min[np.nonzero(outputTensor1_min)]
     outputTensor2_min = outputTensor2_min[np.nonzero(outputTensor2_min)]
     outputTensor1_max = outputTensor1_max[np.nonzero(outputTensor1_max)]
-    outputTensor2_max = outputTensor2_max[np.nonzero(outputTensor2_max)]  
+    outputTensor2_max = outputTensor2_max[np.nonzero(outputTensor2_max)]
     sz1,sz2,sz3,sz4=0,0,0,0
-    
+
     if outputTensor1_min.size>0:
         sz1=np.amin(outputTensor1_min).astype(np.int64)
     if outputTensor2_min.size>0:
@@ -148,8 +148,8 @@ def tensorConsZero(X,dim,var):
         sz3=np.amax(outputTensor1_max).astype(np.int64)
     if outputTensor2_max.size>0:
         sz4=np.amax(outputTensor2_max).astype(np.int64)
-    return sz1,sz3,sz2,sz4 
-    
+    return sz1,sz3,sz2,sz4
+
 def sumT(X,subset):
     return np.sum(X)
 

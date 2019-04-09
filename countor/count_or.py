@@ -18,7 +18,7 @@ def readCSV(fileName):
         data = list(reader)
         data = np.asarray(data)
         return data
-        
+
 def cleanData(data):
     variables=[]
     rows, cols = data.shape
@@ -39,7 +39,7 @@ def cleanData(data):
     for i in range(variables_mat.shape[1]):
         lengths.append(len(variables_mat[0,i]))
     dataTensor=np.zeros(lengths)
-    
+
     for i in range(blankRows, rows):
         for j in range(blankCols, cols):
             if data[i,j].astype(int)==1:
@@ -62,20 +62,20 @@ def saveConstraintsForAll(dataTensor,variables,orderingNotImp):
         # this value will be used to filter max constraints
         maxPossible=1
         for i in range(len(subset[1])):
-            maxPossible*=len(variables[subset[1][i]])   
+            maxPossible*=len(variables[subset[1][i]])
         idTensor=cf.tensorIndicator(dataTensor,newset, variables)
         sumSet = range(len(subset[0]),len(newset))
-        
+
         sumTensor_max,sumTensor_min=cf.tensorSum(idTensor,sumSet, np.array(variables)[list(newset)],0)
         constraints.extend([sumTensor_min])
         constraints.extend([sumTensor_max])
         if len(set(subset[1]))==1 and len(set(orderingNotImp) & set(subset[1]))==0:
             minConsZero,maxConsZero,minConsNonZero,maxConsNonZero = cf.tensorConsZero(idTensor,sumSet, np.array(variables)[list(newset)])
             constraints.extend([minConsZero])
-            constraints.extend([maxConsZero]) 
+            constraints.extend([maxConsZero])
             constraints.extend([minConsNonZero])
-            constraints.extend([maxConsNonZero]) 
-            
+            constraints.extend([maxConsNonZero])
+
         else:
             constraints.extend(['']*4)
         constraints.extend([''])

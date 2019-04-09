@@ -19,7 +19,7 @@ def readCSV(fileName):
         data = list(reader)
         data = np.asarray(data)
         return data
-        
+
 def cleanData(data):
     variables=[]
     rows, cols = data.shape
@@ -40,7 +40,7 @@ def cleanData(data):
     for i in range(variables_mat.shape[1]):
         lengths.append(len(variables_mat[0,i]))
     dataTensor=np.zeros(lengths)
-    
+
     for i in range(blankRows, rows):
         for j in range(blankCols, cols):
             if data[i,j].astype(int)==1:
@@ -72,49 +72,49 @@ def saveConstraintsForAll(dataTensor,variables,orderingNotImp,ind,num_nurses,dir
                 # this value will be used to filter max constraints
                 maxPossible=1
                 for i in range(len(subset[1])):
-                    maxPossible*=len(variables[subset[1][i]])   
+                    maxPossible*=len(variables[subset[1][i]])
                 idTensor=cf.tensorIndicator(dataTensor,newset, variables)
                 sumSet = range(len(subset[0]),len(newset))
-                
+
                 sumTensor_max,sumTensor_min=cf.tensorSum(idTensor,sumSet, np.array(variables)[list(newset)],0)
                 row.extend([sumTensor_min])
                 row.extend([sumTensor_max])
 #                if sumTensor_min==maxPossible:
-#                    row.extend([0]) 
+#                    row.extend([0])
 #                else:
-#                    row.extend([sumTensor_min]) 
-                    
+#                    row.extend([sumTensor_min])
+
 #                if sumTensor_max==maxPossible:
-#                    row.extend([0]) 
+#                    row.extend([0])
 #                else:
-#                    row.extend([sumTensor_max]) 
+#                    row.extend([sumTensor_max])
                 if len(set(subset[1]))==1 and len(set(orderingNotImp) & set(subset[1]))==0:
                     minConsZero,maxConsZero,minConsNonZero,maxConsNonZero = cf.tensorConsZero(idTensor,sumSet, np.array(variables)[list(newset)])
                     row.extend([minConsZero])
-                    row.extend([maxConsZero]) 
+                    row.extend([maxConsZero])
 #                    if minConsZero==maxPossible:
-#                        row.extend([0]) 
+#                        row.extend([0])
 #                    else:
-#                        row.extend([minConsZero]) 
-                        
+#                        row.extend([minConsZero])
+
 #                    if maxConsZero==maxPossible:
-#                        row.extend([0]) 
+#                        row.extend([0])
 #                    else:
-#                        row.extend([maxConsZero]) 
+#                        row.extend([maxConsZero])
 #                    row.extend([maxConsZero])
                     row.extend([minConsNonZero])
-                    row.extend([maxConsNonZero]) 
+                    row.extend([maxConsNonZero])
 #                    if minConsNonZero==maxPossible:
-#                        row.extend([0]) 
+#                        row.extend([0])
 #                    else:
-#                        row.extend([minConsNonZero]) 
-                        
+#                        row.extend([minConsNonZero])
+
 #                    if maxConsNonZero==maxPossible:
-#                        row.extend([0]) 
+#                        row.extend([0])
 #                    else:
-#                        row.extend([maxConsNonZero]) 
+#                        row.extend([maxConsNonZero])
 #                    row.extend([maxConsNonZero])
-                    
+
                 else:
                     row.extend(['']*4)
                 row.extend([''])
@@ -143,11 +143,11 @@ def learnConstraintsForAll(directory,num_nurses,extraInfo,bk,mt,hs,test,nurse_pr
         if ind==0:
             saveConstraintsForAll(dataTensor,variables,orderingNotImp,0,num_nurses,directory,tag+str(0))
         saveConstraintsForAll(dataTensor,variables,orderingNotImp,1,num_nurses,directory,tag+str(0))
-        
+
         skillset=np.zeros([2,num_nurses])
         skillset[0]=extraInfo
         skillset[1]=[int(x==0) for x in extraInfo]
-        
+
         if bk==1:
             for i in range(2):
                 if i==0:
@@ -160,7 +160,7 @@ def learnConstraintsForAll(directory,num_nurses,extraInfo,bk,mt,hs,test,nurse_pr
                     if tmp[j]==1:
                         skillset[j][k]=1
                         k+=1
-                        
+
                 dim=2
                 updatedVariables=variables[:]
                 updatedVariables[dim]=[x for x, y in zip(variables[dim], tmp) if y == 1]
@@ -169,9 +169,9 @@ def learnConstraintsForAll(directory,num_nurses,extraInfo,bk,mt,hs,test,nurse_pr
                     saveConstraintsForAll(mat,updatedVariables,orderingNotImp,0,num_nurses,directory,tag+str(0)+str(i))
                 saveConstraintsForAll(mat,updatedVariables,orderingNotImp,1,num_nurses,directory,tag+str(0)+str(i))
         ind+=1
-        
+
         if test==1:
             prefSatisfaction.append(savePref(dataTensor,nurse_preference))
-    
+
 #    print("\nTime Taken: ",time.clock()-start,' secs')
     return prefSatisfaction
