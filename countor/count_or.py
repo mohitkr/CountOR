@@ -83,12 +83,9 @@ def saveConstraintsForAll(dataTensor,variables,orderingNotImp):
 
 
 def learnConstraints(dataTensor,dim):
-#    data = readCSV(csvFile)
-#    dataTensor,variables=cleanData(data)
     variables = []
     for d in dim:
         variables.append(list(range(d)))
-#    print(variables)
     lenVar=[]
     for i in range(len(variables)):
         lenVar.append(len(variables[i]))
@@ -101,10 +98,6 @@ def learnConstraints(dataTensor,dim):
 def learnConstraintsFromCSV(csvFile):
     data = readCSV(csvFile)
     dataTensor,variables=cleanData(data)
-#    variables = []
-#    for d in dim:
-#        variables.append(list(range(d)))
-#    print(variables)
     lenVar=[]
     for i in range(len(variables)):
         lenVar.append(len(variables[i]))
