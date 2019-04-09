@@ -55,7 +55,7 @@ def saveConstraintsForAll(dataTensor,variables,orderingNotImp):
     repeatDim=()
     r=set([v for v in range(len(variables)) if v not in repeatDim])
 
-    constraints = []
+    constraints = {}
     for l, (m, s) in enumerate(cf.split(r, (), repeatDim)):
         newset = m + s
 
@@ -68,15 +68,22 @@ def saveConstraintsForAll(dataTensor,variables,orderingNotImp):
 
         sumTensor_max,sumTensor_min=cf.tensorSum(idTensor,sumSet, np.array(variables)[list(newset)],0)
 
-        constraints_row = [sumTensor_min, sumTensor_max]
         if len(set(s)) == 1 and \
            len(set(orderingNotImp) & set(s)) == 0:
             minConsZero, maxConsZero, minConsNonZero, maxConsNonZero = \
                 cf.tensorConsZero(idTensor, sumSet, np.array(variables)[list(newset)])
-            constraints_row.extend([minConsZero, maxConsZero, minConsNonZero, maxConsNonZero])
         else:
-            constraints_row.extend([None]*4)
-        constraints.append(constraints_row)
+            minConsZero, maxConsZero, minConsNonZero, maxConsNonZero = \
+                None, None, None, None
+
+        row['minSum'] = sumTensor_min
+        row['maxSum'] = sumTensor_max
+        row['minConsZero'] = minConsZero
+        row['minConsNonZero'] = minConsNonZero
+        row['maxConsZero'] = maxConsZero
+        row['maxConsNonZero'] = maxConsNonZero
+
+        constraints[(m, s)] = row
 
     return constraints
 
