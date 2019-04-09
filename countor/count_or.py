@@ -67,18 +67,15 @@ def saveConstraintsForAll(dataTensor,variables,orderingNotImp):
         sumSet = range(len(subset[0]),len(newset))
 
         sumTensor_max,sumTensor_min=cf.tensorSum(idTensor,sumSet, np.array(variables)[list(newset)],0)
-        constraints.extend([sumTensor_min])
-        constraints.extend([sumTensor_max])
+
+        constraints_row = [sumTensor_min, sumTensor_max]
         if len(set(subset[1]))==1 and len(set(orderingNotImp) & set(subset[1]))==0:
             minConsZero,maxConsZero,minConsNonZero,maxConsNonZero = cf.tensorConsZero(idTensor,sumSet, np.array(variables)[list(newset)])
-            constraints.extend([minConsZero])
-            constraints.extend([maxConsZero])
-            constraints.extend([minConsNonZero])
-            constraints.extend([maxConsNonZero])
-
+            constraints_row.extend([minConsZero, maxConsZero, minConsNonZero, maxConsNonZero])
         else:
-            constraints.extend(['']*4)
-        constraints.extend([''])
+            constraints_row.extend([None]*4)
+        constraints.append(constraints_row)
+
     return constraints
 
 
