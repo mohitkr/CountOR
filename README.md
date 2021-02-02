@@ -15,7 +15,7 @@ WRITEME
 
 
 # How to use
-WRITEME
+python run.py data/data.csv
 
 
 # Authors
