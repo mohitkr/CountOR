@@ -10,7 +10,6 @@ import csv
 import numpy as np
 from collections import OrderedDict
 from . import constraintFormulation as cf
-import os.path
 
 
 def readCSV(fileName):
@@ -21,57 +20,35 @@ def readCSV(fileName):
         return data
 
 def cleanData(data):
-    rows, cols = data.shape
-    headers = 0
-    dimensions=[]
-    while not data[0, headers].isdigit():
-        dimensions.append(list(np.unique(data[:,headers])))
-        headers += 1
-    
-    dim_len=[]
-    for dim in dimensions:
-        dim_len.append(len(dim))
-    dataTensor = np.zeros(dim_len)
-    for i in range(rows):
-        for j in range(headers,cols):
-            if int(data[i, j]) == 1:
-                index = ()
-                for k in range(headers):
-                    index = index + (list(dimensions[k]).index(data[i, k]),)
-                dataTensor[index] = 1
-    return dataTensor, dimensions
+   variables = []
+   rows, cols = data.shape
+   blankRows = 0
+   while not data[blankRows, 0]:
+       blankRows += 1
+   blankCols = 0
+   while not data[0, blankCols]:
+       blankCols += 1
+   for i in range(blankRows):
+       variables.append(list(OrderedDict.fromkeys(data[i, blankCols:])))
+   for i in range(blankCols):
+       variables.append(list(OrderedDict.fromkeys(data[blankRows:, i])))
+   variables_mat = np.matrix(variables)
 
-#def cleanData(data):
-#    variables = []
-#    rows, cols = data.shape
-#    #     finding number of variables
-#    blankRows = 0
-#    while not data[blankRows, 0]:
-#        blankRows += 1
-#    blankCols = 0
-#    while data[0, blankCols] == None:
-#        blankCols += 1
-#    for i in range(blankRows):
-#        variables.append(list(OrderedDict.fromkeys(data[i, blankCols:])))
-#    for i in range(blankCols):
-#        variables.append(list(OrderedDict.fromkeys(data[blankRows:, i])))
-#    variables_mat = np.matrix(variables)
-#
-#    lengths = []
-#    for i in range(variables_mat.shape[1]):
-#        lengths.append(len(variables_mat[0, i]))
-#    dataTensor = np.zeros(lengths)
-#
-#    for i in range(blankRows, rows):
-#        for j in range(blankCols, cols):
-#            if int(data[i, j]) == 1:
-#                index = ()
-#                for k in range(blankRows):
-#                    index = index + (variables[k].index(data[k, j]),)
-#                for k in range(blankCols):
-#                    index = index + (variables[blankRows + k].index(data[i, k]),)
-#                dataTensor[index] = 1
-#    return dataTensor, variables
+   lengths = []
+   for i in range(variables_mat.shape[1]):
+       lengths.append(len(variables_mat[0, i]))
+   dataTensor = np.zeros(lengths)
+
+   for i in range(blankRows, rows):
+       for j in range(blankCols, cols):
+           if int(data[i, j]) == 1:
+               index = ()
+               for k in range(blankRows):
+                   index = index + (variables[k].index(data[k, j]),)
+               for k in range(blankCols):
+                   index = index + (variables[blankRows + k].index(data[i, k]),)
+               dataTensor[index] = 1
+   return dataTensor, variables
 
 
 def getConstraintsForAll(dataTensor, variables, orderingNotImp):
@@ -126,9 +103,6 @@ def learnConstraints(dataTensor, dim):
         lenVar.append(len(variables[i]))
     orderingNotImp = [2]
     return getConstraintsForAll(dataTensor, variables, orderingNotImp)
-
-
-#    saveConstraintsForAll(dataTensor,variables,orderingNotImp,1,num_nurses,directory,tag+str(0))
 
 
 def learnConstraintsFromCSV(csvFile):

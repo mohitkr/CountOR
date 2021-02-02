@@ -1,19 +1,9 @@
 import numpy as np
 import itertools as it
-from scipy import stats
 
 # import matplotlib.pyplot as plt
 
-
-def indicator(X):
-    ind = 1
-    if np.count_nonzero(X) == 0:
-        ind = 0
-    return ind
-
-
 def minConsZero(X):
-    #    print(X)
     mn = 1000
     ind = 0
     for i in range(len(X)):
@@ -24,9 +14,7 @@ def minConsZero(X):
                 mn = min(ind, mn)
             ind = 0
     if mn == 1000 or ind > 0:
-        #    if mn==1000:
         return min(mn, ind)
-    #    print(mn)
     return mn
 
 
@@ -53,7 +41,6 @@ def minConsNonZero(X):
                 mn = min(ind, mn)
             ind = 0
     if mn == 1000 or ind > 0:
-        #    if mn==1000:
         return min(mn, ind)
     return mn
 
@@ -110,8 +97,6 @@ def tensorSum(X, dim, var, ecInd):
         outputTensor[multiIndex] = np.sum(X[tuple(a)])
     if ecInd == 1:
         return int(outputTensor.max(axis=0))
-    #    plt.hist(outputTensor.ravel(),bins='auto')
-    #    plt.show()
     return (
         np.amax(outputTensor).astype(np.int64),
         np.amin(outputTensor).astype(np.int64),
@@ -138,9 +123,7 @@ def tensorConsZero(X, dim, var):
             a.append(slice(0, X.shape[i]))
         for i in range(len(dim)):
             a[dim[i]] = multiIndex[i]
-        #        print(X[tuple(a)])
         outputTensor1_min[multiIndex] = minConsZero(X[tuple(a)])
-        #        print(outputTensor1_min[multiIndex])
         outputTensor2_min[multiIndex] = minConsNonZero(X[tuple(a)])
         outputTensor1_max[multiIndex] = maxConsZero(X[tuple(a)])
         outputTensor2_max[multiIndex] = maxConsNonZero(X[tuple(a)])
@@ -160,14 +143,6 @@ def tensorConsZero(X, dim, var):
     if outputTensor2_max.size > 0:
         sz4 = np.amax(outputTensor2_max).astype(np.int64)
     return sz1, sz3, sz2, sz4
-
-
-def sumT(X, subset):
-    return np.sum(X)
-
-
-def maxT(X, subset):
-    return np.sum(X)
 
 
 def split(X, partSet, repeatDim):
