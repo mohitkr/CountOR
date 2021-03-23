@@ -4,6 +4,9 @@ import numpy as np
 import argparse
 import countor
 
+import countor.simple_sampler as sampler
+
+
 
 def main():
 
@@ -19,8 +22,17 @@ def main():
     np.random.seed(args.seed)
 
     rng = np.random.RandomState(args.seed)
-
-    print(countor.count_or.learnConstraintsFromCSV(args.csv))
+    learned_bounds=countor.count_or.learnConstraintsFromCSV(args.csv)
+    learned_bounds = [0 if v=='' else v for v in learned_bounds]
+    learned_bounds=[int(v) for v in learned_bounds]
+    bounds=np.array(learned_bounds).reshape(12, 7)
+    bounds=np.array([b[:-1] for b in bounds])
+    print(bounds)
+    sampler.generateSample(12,7,3,1,bounds,"")
+    print(bounds)
+    # bounds
+    #
+    # print(countor.count_or.learnConstraintsFromCSV(args.csv))
 
 
 if __name__ == '__main__':

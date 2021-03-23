@@ -104,3 +104,7 @@ def learnConstraintsFromCSV(csvFile):
     orderingNotImp=[2]
     constraints=saveConstraintsForAll(dataTensor,variables,orderingNotImp)
     return constraints
+
+if __name__ == "__main__":
+    f="data/data.csv"
+    print(learnConstraintsFromCSV(f))
