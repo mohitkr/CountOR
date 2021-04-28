@@ -27,9 +27,9 @@ def main():
     learned_bounds=[int(v) for v in learned_bounds]
     bounds=np.array(learned_bounds).reshape(12, 7)
     bounds=np.array([b[:-1] for b in bounds])
-    print(bounds)
+    # print(bounds)
     sampler.generateSample(12,7,3,1,bounds,"")
-    print(bounds)
+    # print(bounds)
     # bounds
     #
     # print(countor.count_or.learnConstraintsFromCSV(args.csv))
